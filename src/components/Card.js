@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from '../img/logo.webp'
+import moment from 'moment';
 import styled from '@emotion/styled'
 
 const Container = styled.div`
@@ -12,6 +12,7 @@ const Container = styled.div`
     flex-direction: row;
     align-items: center;
     padding: 1.2rem;
+    cursor: pointer;
 
     img {
         height: 100%;
@@ -99,37 +100,58 @@ const Container = styled.div`
       margin-right: 8px;
     }
 
-
-`;
-
+  `;
 
 
-const Card = () => {
+
+const Card = ({setShowDetail, location, companyLogo, companyName, id, jobType, publicDate, title}) => {
+
+const handleClick = (e)  => {
+  e.preventDefault()
+  setShowDetail(true)
+}
+
+
+  // var date =  publicDate;
+  // var nowMoment = moment().format('DD/MM/YYYY');
+  // var date = moment().format('YYYY/MM/DD')
+  // var dif = date.dif(moment({publicDate}))
+  // var numdays = Math.ceil(dif / 86400000)
+  // var Date =  new Date().getTime();
+
+
+var fechaInicio = new Date(publicDate).getTime()
+var fechaFin    = new Date().getTime()
+var dif = fechaFin - fechaInicio
+var numdays = Math.round(dif/(1000*60*60*24))
+
+
+
   return (
-    <Container>
-        <img src={logo} alt="" />
-
-        <div className="information">
-            <h4 className="company">Innocaption</h4>
-            <h2 className="position">Finance Director</h2>
+    <Container onClick={ e => handleClick(e)}>
+        <img src={companyLogo} alt="" />
+       
+        <div className="information" >
+            <h4 className="company">{companyName}</h4>
+            <h2 className="position">{title}</h2>
             <div className="full">
-              <span className="full__time">Full time</span>
+              {jobType === 'full_time' ? <span className="full__time">Full time</span> : null }
             </div>          
         </div>
 
          <div className="citydate">
                 <div className="city">
                   <span className="material-symbols-outlined">public </span>     
-                  <p>New York</p>
+                  <p>{location}</p>
                 </div>
                 
                 <div className="date">
                  <span className="material-symbols-outlined"> schedule </span>
-                  <p>5 days ago</p>
+                  <p>{numdays} + days ago</p>
                 </div>
 
             </div>
-    </Container>
+    </Container>   
   )
 }
 

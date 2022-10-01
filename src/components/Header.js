@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import './header.css'
+import JobsContext from  './context/JobsContext'
+import getJobsPrim from '../services/getJobsPrim'
 import styled from '@emotion/styled'
 
 const Container = styled.div`
@@ -42,9 +44,9 @@ const Container = styled.div`
                     height: 100%;
                     border: none;
                     background-color: transparent;
-                    color: var(--graymed);
+                    color: gray;
                     outline: none;
-
+                    font-family: var(--font__sec);
 
                     &::placeholder {
                         text-align: left;
@@ -91,15 +93,59 @@ const Container = styled.div`
             color: var(--bluedark) ;
         }
 
+          .error {
+            color: #EA8282;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 1.8rem;
+            font-family: var(--font__prim);
+            
+            
+    }
+
 
 `;
 
 
 const Header = () => {
+
+const [ search, setSearch ] = useState('')
+const [ error, setError ] = useState(false)
+const { jobs, setJobs, consult, setConsult } = useContext(JobsContext)
+
+useEffect( () => {       
+    getJobsPrim( consult, search, setConsult ).then(jobsconsult => setJobs(jobsconsult))
+},[consult])
+
+
+    // Function for set items into state
+    const handleChange = e => {
+        setSearch(e.target.value)
+    }
+
+
+    // When user click subtmit on form
+    const handleSubmit = e => {
+        e.preventDefault()
+        if (search.trim() === '') {
+            setError(true)
+            return;
+        }
+        console.log(search)
+        setError(false)
+        setConsult(true)
+    }
+
+
+
   return (
     <Container>
         <h1 className="logo">Google<span> jobs</span></h1>
-        <form >
+       
+        <form 
+            onSubmit={handleSubmit}
+        >
             <div className="header">
                 <div className="search__header">
                     <div className='icon__job'>
@@ -109,19 +155,24 @@ const Header = () => {
                             <input 
                                 type='text'
                                 name='search'
-                                id='search'
+                                id={search}
                                 className= 'inpser' 
                                 placeholder='Title or companies'
+                                onChange={handleChange}
                             />                    
                         </div>
                         <div className="button__search">
                              <button>Search</button>
                         </div>
                 </div>
-            </div>        
+            </div> 
+            {error ? <p className="error">Please enter a value</p> : null}    
         </form>
     </Container>
   )
 }
 
 export default Header
+
+
+            // {/* {!jobs  && search !== '' ? <p className="error">We did not find any results</p> : null}    */}

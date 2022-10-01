@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react'
 import getJobsPrim from '../../services/getJobsPrim'
 
+export function useJobsPrim(consult, search, setConsult) {
 
-
-export function useJobsPrim() {
-
-    const [ jobs, setJobs ] = useState([])
+    const [ jobscompany, setJobsCompany ] = useState([])
 
     useEffect( () => { 
-      getJobsPrim().then(jobs => setJobs(jobs))
+      
+      getJobsPrim(consult, search, setConsult).then(jobsconsult => setJobsCompany(jobsconsult))
 
-    }, [])
+    }, [consult])
 
 
-  return jobs
+  return jobscompany
     
 }
+

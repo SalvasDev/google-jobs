@@ -187,13 +187,19 @@ const Container = styled.div`
    
 `;
 
-const DetailJob = () => {
+const DetailJob = ({setShowDetail}) => {
+
+const handleClick = (e)  => {
+  e.preventDefault()
+  setShowDetail(false)
+}
+
   return (
     <Container>
         <h1 className="logo">Google<span> jobs</span></h1>
         <div className="container__job">
             <div className="aside__job">
-                 <button className="btn__back">
+                 <button  onClick={ e => handleClick(e)} className="btn__back">
                     <span className="material-symbols-rounded"> trending_flat</span>
                     Back to search
                 </button>

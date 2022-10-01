@@ -1,7 +1,8 @@
-import React from 'react'
-import styled from '@emotion/styled'
+import React, { useContext } from 'react'
 import Card from './Card';
-import { useJobsPrim } from './hooks/useJobsPrim';
+import JobsContext from  './context/JobsContext'
+import styled from '@emotion/styled'
+
 
 const Container = styled.div`
     width: 100%;
@@ -48,21 +49,54 @@ const Container = styled.div`
   font-size: 1.2rem; 
 }
 
+ .error {
+            color: #EA8282;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: left;
+            font-size: 1.8rem;
+            font-family: var(--font__prim);
+            
+            
+    }
+
 `;
 
 
-const Listcards = () => {
+const Listcards = ({setShowDetail}) => {
 
-// const { jobs } = useJobsPrim()
+const { jobs } = useContext(JobsContext)
 
+  var i = 0
 
   return (
     <Container>
-        <Card/>
-        <Card/>
-        <Card/>
-        <Card/>
-        <Card/>
+      { console.log('dentro de lista') }
+      {console.log(jobs) }
+
+      {jobs.length === 0 ? <p className="error">We did not find any results 😩 , please try again 😀 !!! </p> : null}    
+
+       { jobs.slice(0, 5).map((job) => {
+        
+        i = i + 1;            
+
+        var { candidate_required_location, company_logo, company_name, id, job_type, publication_date, title} = jobs[i-1] || {}       
+
+        return <Card
+              key = {i.toString()}
+              setShowDetail = {setShowDetail}
+              companyLogo = {company_logo}
+              location = {candidate_required_location}
+              companyName = {company_name}
+              id = {id}
+              jobType = {job_type}
+              publicDate = {publication_date}
+              title = {title}
+            />
+
+        })
+       }       
+  
         
         <div className="index">
           

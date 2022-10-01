@@ -11,23 +11,25 @@ const Container = styled.div`
         column-gap: 3rem;
 
         .aside {
-            background-color: aqua;
-            height: 30rem;
-        }
+          background-color: aqua;
+          height: 30rem;
+      }
 
         .content {
-            background-color: beige;
-                        height: 30rem;
+          background-color: beige;
+          height: 30rem;
 
         }
 `;
 
 
-const Main = () => {
+const Main = ({setShowDetail}) => {
   return (
     <Container>
         <Aside/>
-    <Listcards />    
+        <Listcards
+          setShowDetail = {setShowDetail}
+        />    
      </Container>
   )
 }
