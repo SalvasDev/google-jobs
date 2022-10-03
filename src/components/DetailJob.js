@@ -1,7 +1,8 @@
-import React from 'react'
-import logo from '../img/logo.webp'
+import React, {useContext, useEffect, useState} from 'react'
+import IdContext  from './context/IdContext';
 import Footer from './Footer';
 import styled from '@emotion/styled'
+import getOneJob from '../services/getOneJob';
 
 const Container = styled.div`
     width: min(95%, 1200px);
@@ -182,17 +183,65 @@ const Container = styled.div`
         font-size: 1.6rem;
         color: var(--bluedark);
         font-weight: 400;
+        margin-top: 3.2rem;
     } 
+
+    .btn__aply {
+        width: 100%;
+        height: 4.8rem;
+        background-color: var(--bluerey);
+        color: white;
+        font-family: var(--font__sec);
+        font-weight: 500;
+        font-size: 1.6rem;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+       
+        &:hover {
+            background-color: blue;      
+        }
+
+        .url__aply {
+            color: white;
+            text-decoration: none;
+        }
+    }
 
    
 `;
 
-const DetailJob = ({setShowDetail}) => {
+const DetailJob = ({setShowDetail, handleForce}) => {
+
+const { idJob } = useContext(IdContext)
+const [ oneJob, setOneJob ] = useState([])
 
 const handleClick = (e)  => {
-  e.preventDefault()
+  e.preventDefault()  
+  handleForce()
   setShowDetail(false)
+
 }
+
+useEffect(() => {
+    getOneJob( idJob ).then(jobsconsult => setOneJob(jobsconsult))
+}, [idJob])
+
+
+var { candidate_required_location, company_logo, company_name, job_type, publication_date, title, url, description} = oneJob  
+
+var jobType = job_type
+var publicDate = publication_date
+
+var dateInit = new Date(publicDate).getTime()
+var dateEnd    = new Date().getTime()
+var dif = dateEnd - dateInit
+var numdays = Math.round(dif/(1000*60*60*24))
+
+var urlCompany = url
+
+var htmlContent = { __html: description };
+
 
   return (
     <Container>
@@ -200,64 +249,42 @@ const handleClick = (e)  => {
         <div className="container__job">
             <div className="aside__job">
                  <button  onClick={ e => handleClick(e)} className="btn__back">
-                    <span className="material-symbols-rounded"> trending_flat</span>
+                    <span className="material-symbols-rounded">trending_flat</span>
                     Back to search
                 </button>
                 
                 <h3 className="how">How to Apply</h3>    
                 
-                <p className="contact">Please email a copy of your resume and online portfolio to <span>wes@kasisto.com</span> & CC <span>eric@kasisto.com</span></p>
+                <p className="contact">Please visit de next page for more information</p>
+               <a className="url__aply" href={urlCompany} target="_blank" rel="noopener noreferrer">  <button className="btn__aply">Aply</button></a> 
 
             </div>
 
 
             <div className="main__job">
                 <div className="title__job">
-                    <span className="name__job">Front-End Software Engineer</span>
-                    <span className="full__time">Full time</span>
+                    <span className="name__job">{title}</span>
+                    {jobType === 'full_time' ? <span className="full__time">Full time</span> : jobType !== '' ? <span className="full__time">{jobType}</span> : null }
                 </div>
                 
                 <div className="date">
                 <span className="material-symbols-outlined"> schedule </span>
-                  <p>5 days ago</p>
+                  <p>{numdays} days ago</p>
                 </div>
                 
                 <div className="group__company">
                     
-                    <img src={logo} alt="" />
+                    <img src={company_logo} alt="" />
 
                     <div className="info__company">
-                        <span className="name__company">InnoCaption</span>
+                        <span className="name__company">{company_name}</span>
                         <div className="city">
                             <span className="material-symbols-outlined">public </span>     
-                            <p>New York</p>
+                            <p>{candidate_required_location}</p>
                         </div>                       
                     </div>
                 </div>
-
-                <p className="description__job">Humanizing Digital Experiences® <br/> <br/>
-
-                Kasisto’s Digital Experience Platform, KAI, is designed for financial institutions to deliver the industry’s most amazing Conversational AI powered intelligent virtual assistants to their customers. KAI is open and extensible, and also fluent in the language of banking and finance. From simple retail transactions to the complex demands of corporate banks and wealth management, financial institutions can deliver meaningful digital interactions with KAI that help build their digital brand. <br/> <br/>
-
-                Financial institutions around the world use KAI, including DBS Bank, J.P. Morgan, Mastercard, Standard Chartered, TD Bank, and Manulife Bank among others. They chose KAI for its proven track record to drive business results while improving customer experiences. The platform is used by millions of consumers around the world, all the time, across multiple channels, in different languages, and is optimized for performance, scalability, security, and compliance. <br/> <br/>
-
-                This position<br/> <br/>
-
-                We are looking for a Full-Stack, client side software engineer to help build and integrate responsive chat interfaces, analytics dashboards and reporting tools. <br/> <br/>
-
-                What you’ll be doing<br/> <br/>
-
-                Working closely with clients and internal engineering, product and design teams to gather requirements Building and integrating front-end applications with CSS, HTML, Javascript, jQuery, Vue.js, Webpack, Handlebars.js, LESS, Backbone, Python, Django and Java Working to improve user experience and functionality for tools Writing testable code utilizing common front-end unit and BDD testing frameworks What you need for this position. <br/> <br/>
-
-                3+ years in client-side web development with CSS, HTML, Javascript and jQuery Proven, full-stack front-end experience using Python and Django Other Modern Web Framework(s) experience is a plus (React, Vue, Angular, Ember) Experience working collaboratively to build scalable, modular, production software in an Agile environment Experience using RESTful json services Node.js and API development familiarity is plus D3.js is a plus.  <br/> <br/>
-
-                What we offer:  <br/> <br/>
-
-                Competitive compensation package Ground floor opportunity within rapidly growing tech startup Great collaborative team environment Full Benefits Fun perks.  <br/> <br/>
-
-                Location - NYC, Flatiron District  <br/> <br/>
-
-                We welcome your cover letter with a description of your previous complete experience and your resume. Applicants must be authorized to work in the US as we are unable to sponsor. Kasisto is an equal opportunity employer.</p>
+                <div  className="description__job" dangerouslySetInnerHTML= {htmlContent} />
             </div>
 
         </div>
@@ -271,3 +298,8 @@ const handleClick = (e)  => {
 }
 
 export default DetailJob
+
+
+
+
+

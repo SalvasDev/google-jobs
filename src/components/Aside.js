@@ -1,5 +1,9 @@
-import React from 'react'
+import React, {useContext, useState} from 'react'
+import BtnOption from './BtnOption';
+import JobsContext from  './context/JobsContext'
+import getFullTime from '../services/getFullTime';
 import styled from '@emotion/styled'
+import getCountryJobs from '../services/getCountryJobs';
 
 const Container = styled.div`
     width: 100%;
@@ -124,35 +128,7 @@ const Container = styled.div`
 
     }
 
-    .input__radio {
-        height: 1.8rem;
-        width: 1.8rem;        
-        margin-right: 1.2rem;
-        vertical-align: middle;
-        margin-top: -.1rem;
-
-    }
-
-    input[type=radio]{
-        appearance: none;
-        border-radius: 50%;
-        border: 1px solid var(--graymed);
-        background-color: transparent;
-    }
-
-     input[type='radio']:checked {
-       border: none;
-    }
-
-    input[type=radio]:checked:before {
-        content: '◉';
-        position: absolute;
-        font-size: 2.2rem;
-        color: var(--bluerey);
-        margin-left: -.2rem;
-        margin-top: -.8rem;
-      } 
-
+    
       h1 {
         font-family: var(--font__prim);
         font-weight: 700;
@@ -162,53 +138,110 @@ const Container = styled.div`
         margin-top: 3rem;
         margin-bottom: 1.4rem;
       }
+
+      .error {
+            color: #EA8282;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: left;
+            font-size: 1.6rem;
+            font-family: var(--font__prim);            
+            
+    }
  
 `;
 
 
-const Aside = () => {
+const Aside = ({handleForce}) => {
+
+
+const { setJobs, setConsult } = useContext(JobsContext)
+const [ ischecked, setIsChecked ] = useState(false)
+const [ error, setError ] = useState(false)
+const [ searchcountry, setSearchCountry ] = useState('')
+
+
+const returnCountries = () => {
+        handleForce()
+    } 
+
+const handleCheck = (e) => {
+    e.preventDefault()
+        if (ischecked === false) {
+            setIsChecked(true)
+            getFullTime().then(jobsconsult => setJobs(jobsconsult)) 
+        } else {
+            setIsChecked(false)
+            returnCountries()
+        }
+ }
+
+ 
+
+ // When user make enter en country serch bar
+ const handleSubmit = (e) => {
+    e.preventDefault()
+     if (searchcountry.trim() === '') {
+        setError(true)
+        return
+    } else {
+        setError(false)
+        getCountryJobs(searchcountry, setConsult).then(job => setJobs(job))
+    }
+ }
+
+ // Function for set items into state
+ const handleChange = e => {
+    setSearchCountry(e.target.value)        
+ }
+  
+const btnOptions = ['Worldwide', 'USA', 'Canada', 'Europe', 'Americas']
+var i =  0
+
   return (
     <Container>
 
-       <label className="lab__full"> <input type="checkbox" className="check__full"/>
+       <label
+        className="lab__full">
+             <input
+                type="checkbox" 
+                checked = {ischecked}
+                className="check__full"
+                onChange = { e => handleCheck(e) }                    
+            />
             Full time
         </label>
         
         <h1>Location</h1>
-
+        <form
+            onSubmit={handleSubmit}
+         >
         <div className="inp_several">          
             <span className="material-symbols-outlined">public </span>        
-            <input className='input_country'  type="text" placeholder='Country'/>
+            <input
+                 className='input_country'  
+                 type="text" 
+                 placeholder='Country'
+                 onChange= {handleChange}
+            />
         </div>
+        </form>
+
+        {error ? <p className="error">Please enter a value</p> : null}    
 
         <section className="section__radio">
 
-           <div className="option__radio">
-
-            <label className="lab__radio">
-            <input name="country_radio" value="usa" type="radio" className="input__radio"/>
-            USA</label>
-
-             <label className="lab__radio">
-            <input name="country_radio" value="canada" type="radio" className="input__radio"/>
-            Canada</label>
-
-            <label className="lab__radio">
-            <input name="country_radio" value="spain" type="radio" className="input__radio"/>
-            Spain</label>
-
-            <label className="lab__radio">
-            <input name="country_radio" value="germany" type="radio" className="input__radio"/>
-            Germany</label>
-            
-           </div>
-
-        </section>    
+        <div className="option__radio">
 
        
+         <BtnOption />
+                    
+        </div>
+    </section>           
                     
     </Container>
   )
 }
 
 export default Aside
+

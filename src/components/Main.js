@@ -23,12 +23,15 @@ const Container = styled.div`
 `;
 
 
-const Main = ({setShowDetail}) => {
+const Main = ({setShowDetail, handleForce}) => {
   return (
     <Container>
-        <Aside/>
+        <Aside
+          handleForce={handleForce}
+        />
         <Listcards
           setShowDetail = {setShowDetail}
+
         />    
      </Container>
   )

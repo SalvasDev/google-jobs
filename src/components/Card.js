@@ -1,5 +1,5 @@
-import React from 'react'
-import moment from 'moment';
+import React, {useContext} from 'react'
+import IdContext from './context/IdContext';
 import styled from '@emotion/styled'
 
 const Container = styled.div`
@@ -106,26 +106,19 @@ const Container = styled.div`
 
 const Card = ({setShowDetail, location, companyLogo, companyName, id, jobType, publicDate, title}) => {
 
+const { setIdJob } = useContext(IdContext)
+
+
 const handleClick = (e)  => {
   e.preventDefault()
+  setIdJob(id)
   setShowDetail(true)
 }
 
-
-  // var date =  publicDate;
-  // var nowMoment = moment().format('DD/MM/YYYY');
-  // var date = moment().format('YYYY/MM/DD')
-  // var dif = date.dif(moment({publicDate}))
-  // var numdays = Math.ceil(dif / 86400000)
-  // var Date =  new Date().getTime();
-
-
-var fechaInicio = new Date(publicDate).getTime()
-var fechaFin    = new Date().getTime()
-var dif = fechaFin - fechaInicio
+var dateInit = new Date(publicDate).getTime()
+var dateEnd    = new Date().getTime()
+var dif = dateEnd - dateInit
 var numdays = Math.round(dif/(1000*60*60*24))
-
-
 
   return (
     <Container onClick={ e => handleClick(e)}>
@@ -135,7 +128,7 @@ var numdays = Math.round(dif/(1000*60*60*24))
             <h4 className="company">{companyName}</h4>
             <h2 className="position">{title}</h2>
             <div className="full">
-              {jobType === 'full_time' ? <span className="full__time">Full time</span> : null }
+              {jobType === 'full_time' ? <span className="full__time">Full time</span> : jobType !== '' ? <span className="full__time">{jobType}</span> : null }
             </div>          
         </div>
 
@@ -147,7 +140,7 @@ var numdays = Math.round(dif/(1000*60*60*24))
                 
                 <div className="date">
                  <span className="material-symbols-outlined"> schedule </span>
-                  <p>{numdays} + days ago</p>
+                  <p>{numdays} days ago</p>
                 </div>
 
             </div>

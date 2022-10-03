@@ -14,6 +14,8 @@ const Container = styled.div`
             font-weight: 700;
             font-family: 'Poppins', sans-serif;
             color: var(--balck);
+            text-decoration: none;
+            cursor: pointer;
 
             span {
                 font-weight: 300;
@@ -77,8 +79,7 @@ const Container = styled.div`
             height: 85%;
             width: 20%;
             margin-right: .5rem;
-        }
-
+        }       
 
         button {
             background-color: var(--bluerey);
@@ -87,23 +88,25 @@ const Container = styled.div`
             border: none;
             width: 100%;
             border-radius: 4px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: blue;
+            }            
         }
 
          .search__header:focus-within span {
             color: var(--bluedark) ;
         }
 
-          .error {
+        .error {
             color: #EA8282;
             border-radius: 12px;
             margin-bottom: 2rem;
             text-align: center;
             font-size: 1.8rem;
-            font-family: var(--font__prim);
-            
-            
-    }
-
+            font-family: var(--font__prim);           
+            }
 
 `;
 
@@ -112,7 +115,7 @@ const Header = () => {
 
 const [ search, setSearch ] = useState('')
 const [ error, setError ] = useState(false)
-const { jobs, setJobs, consult, setConsult } = useContext(JobsContext)
+const { setJobs, consult, setConsult } = useContext(JobsContext)
 
 useEffect( () => {       
     getJobsPrim( consult, search, setConsult ).then(jobsconsult => setJobs(jobsconsult))
@@ -121,7 +124,7 @@ useEffect( () => {
 
     // Function for set items into state
     const handleChange = e => {
-        setSearch(e.target.value)
+        setSearch(e.target.value)        
     }
 
 
@@ -141,7 +144,9 @@ useEffect( () => {
 
   return (
     <Container>
-        <h1 className="logo">Google<span> jobs</span></h1>
+        <a href="/" className="logo">
+            <h1 className="logo">Google<span> jobs</span></h1>
+        </a>
        
         <form 
             onSubmit={handleSubmit}
@@ -175,4 +180,3 @@ useEffect( () => {
 export default Header
 
 
-            // {/* {!jobs  && search !== '' ? <p className="error">We did not find any results</p> : null}    */}

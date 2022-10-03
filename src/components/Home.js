@@ -5,16 +5,18 @@ import Footer from './Footer';
 import styled from '@emotion/styled'
 
 const Container = styled.div`
-
 `;
 
-const Home = ({setShowDetail}) => {
+const Home = ({setShowDetail, handleForce}) => {
+
+
 
   return (
     <Container>
         <Header />       
         <Main
         setShowDetail = {setShowDetail}
+        handleForce = {handleForce}
         />
         <Footer author='Salvador Sánchez'/>
     </Container>
