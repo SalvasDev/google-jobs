@@ -1,10 +1,11 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext} from 'react'
 import PagesContext from './context/PagesContext'
 import styled from '@emotion/styled'
 
 const Btn = styled.div`
 
   .page {
+    z-index: -100;
     width: 3.6rem;
     height: 3.6rem;
     border: 1px solid var(--graymed);
@@ -25,30 +26,12 @@ const Btn = styled.div`
   }  
 
   }
-
 }
 
-.activeBtnColor {
-    width: 3.6rem;
-    height: 3.6rem;
-    border: none;
-    background-color: var(--bluerey);
-    border-radius: 4px;
-    text-align: center;
-    justify-items: center;
-    color: white;
-    cursor: pointer;
-
-  &:hover {
-    background-color: var(--bluerey);
-    border: none;
-
-  &:hover span {
-    color: white;
-  }  
-
-  }
-  
+#actived {
+  background-color: var(--bluerey);
+  color: white;
+  border: none;
 }
 
 
@@ -57,27 +40,36 @@ const Btn = styled.div`
 const BtnPage = ({numPage, setPageCurrent}) => {
 
   
-  const { setNumInit, setNumEnd } = useContext(PagesContext)
-  const [ activeButton, setActiveButton ] = useState(false)
+  const { setNumInit, setNumEnd, selected, setSelected } = useContext(PagesContext)
+
+  var {selec, pageSelected } = selected 
 
   const handleClick = e => {
     e.preventDefault()
-    setActiveButton(true)
+
     setNumEnd(numend)
     setNumInit(numinit) 
     setPageCurrent(numPage)
+    
+    const actualPage = {
+      selec : true,
+      pageSelected : numPage      
+    }    
+    setSelected( actualPage )
+
   }
 
   var numend = numPage * 5
   var numinit = numend - 5
 
-  // var colorActive =  numPage === 1  || activeButton ?  'activeBtnColor' : 'page'
+ let btnSelected = selec && (pageSelected === numPage)  ? 'actived' : ''
 
   return (
     <Btn>
         <button 
-            className= 'page page-item active'
+            className= 'page'
             onClick={handleClick}
+            id= {btnSelected}
             >                
            <span>{numPage}</span>
          </button>

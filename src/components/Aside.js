@@ -1,6 +1,7 @@
 import React, {useContext, useState} from 'react'
 import BtnOption from './BtnOption';
 import JobsContext from  './context/JobsContext'
+import PagesContext from './context/PagesContext'
 import getFullTime from '../services/getFullTime';
 import styled from '@emotion/styled'
 import getCountryJobs from '../services/getCountryJobs';
@@ -27,8 +28,11 @@ const Container = styled.div`
             height: 100%;
             border: none;
             background-color: transparent;
-            color: var(--graymed);
+            color: gray;
             outline: none;
+            font-size: 1.4rem;
+            font-family: var(--font__sec);
+
 
 
             &::placeholder {
@@ -155,10 +159,12 @@ const Container = styled.div`
 const Aside = ({handleForce}) => {
 
 
+const { setNumInit, setNumEnd, setSelected, setPageCurrent } = useContext(PagesContext)
 const { setJobs, setConsult } = useContext(JobsContext)
 const [ ischecked, setIsChecked ] = useState(false)
 const [ error, setError ] = useState(false)
 const [ searchcountry, setSearchCountry ] = useState('')
+
 
 
 const returnCountries = () => {
@@ -169,6 +175,20 @@ const handleCheck = (e) => {
     e.preventDefault()
         if (ischecked === false) {
             setIsChecked(true)
+
+            //Reset list jobs cards
+            setNumInit(0)
+            setNumEnd(5) 
+            
+            // Reset to the current page
+            const actualPage = {
+            selec : true,
+            pageSelected : 1      
+            }    
+            setSelected( actualPage )
+
+            setPageCurrent(1)
+
             getFullTime().then(jobsconsult => setJobs(jobsconsult)) 
         } else {
             setIsChecked(false)
@@ -186,6 +206,20 @@ const handleCheck = (e) => {
         return
     } else {
         setError(false)
+
+         //Reset list jobs cards
+            setNumInit(0)
+            setNumEnd(5) 
+            
+            // Reset to the current page
+            const actualPage = {
+            selec : true,
+            pageSelected : 1      
+            }    
+            setSelected( actualPage )
+
+            setPageCurrent(1)
+        
         getCountryJobs(searchcountry, setConsult).then(job => setJobs(job))
     }
  }
@@ -195,7 +229,6 @@ const handleCheck = (e) => {
     setSearchCountry(e.target.value)        
  }
   
-const btnOptions = ['Worldwide', 'USA', 'Canada', 'Europe', 'Americas']
 var i =  0
 
   return (

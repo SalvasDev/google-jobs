@@ -26,6 +26,14 @@ const Container = styled.div`
         height: 100%;
         grid-template-columns: 20% 1fr;
         column-gap: 7.7rem;
+
+        @media (max-width: 768px){
+            display: flex;
+            flex-direction: column;
+            row-gap: 7rem;
+            margin-top: 3rem;          
+      }
+
     }
 
     .btn__back {
@@ -61,6 +69,7 @@ const Container = styled.div`
         font-size: 1.4rem;
         text-transform: uppercase;
         color: var(--graymed);
+        margin-top: 2rem;
     }
 
 
@@ -69,6 +78,7 @@ const Container = styled.div`
         font-size: 1.4rem;
         font-weight: 500;
         color: var(--bluedark);
+        margin-top: 2rem;
     }
 
 
@@ -86,7 +96,15 @@ const Container = styled.div`
 
     .title__job {
         display: flex;
-        align-items: center;        
+        align-items: center; 
+        
+           @media (max-width: 427px){
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 2rem; 
+            align-items: flex-start;
+            row-gap: 1rem;
+      }
     }
 
     .name__job {
@@ -109,11 +127,11 @@ const Container = styled.div`
 
     .date {
       display: flex;
-      align-items: center;
       font-size: 1.2rem;
       font-family: var(--font__sec);
       font-weight: 500;
       color: var(--graymed);
+      align-items: center;
 
     }
 
@@ -197,6 +215,7 @@ const Container = styled.div`
         cursor: pointer;
         border: none;
         border-radius: 4px;
+        margin-top: 2rem;
        
         &:hover {
             background-color: blue;      
@@ -206,6 +225,11 @@ const Container = styled.div`
             color: white;
             text-decoration: none;
         }
+
+        @media (max-width: 768px){
+          width: 70%;          
+      }
+
     }
 
    
@@ -228,7 +252,7 @@ useEffect(() => {
 }, [idJob])
 
 
-var { candidate_required_location, company_logo, company_name, job_type, publication_date, title, url, description} = oneJob  
+var { candidate_required_location, company_logo, company_name, job_type, publication_date, title, url, description} = oneJob || {}  
 
 var jobType = job_type
 var publicDate = publication_date
@@ -245,7 +269,7 @@ var htmlContent = { __html: description };
 
   return (
     <Container>
-        <h1 className="logo">Google<span> jobs</span></h1>
+        <h1 className="logo">Remo<span> jobs</span></h1>
         <div className="container__job">
             <div className="aside__job">
                  <button  onClick={ e => handleClick(e)} className="btn__back">

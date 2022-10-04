@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 
 const Container = styled.div`
     width: 100%;
-    height: 11.4rem;
+    height: 114px;
     background-color: var(--white);
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
     border-radius: 4px;
@@ -13,6 +13,37 @@ const Container = styled.div`
     align-items: center;
     padding: 1.2rem;
     cursor: pointer;
+
+
+      @media (max-width: 1170px) {
+        height: 140px;
+      }
+
+      @media (max-width: 860px){
+        width: 95%;
+      }
+
+      @media (max-width: 768px){
+        margin-top: 3rem;
+        width: 100%;
+      }
+
+      @media (max-width: 552px){
+          display: flex;
+          flex-direction: column;
+          row-gap: 1rem;
+          padding-top: 3rem;
+          height: 200px;
+       }
+
+
+      .row__info {
+        display: flex;
+        height: 100%;
+ 
+      }
+
+
 
     img {
         height: 100%;
@@ -23,6 +54,9 @@ const Container = styled.div`
       margin-left: 1.6rem;
       margin-top: 0;
       height: 100%;
+
+
+        
     }
 
     .company {
@@ -43,6 +77,9 @@ const Container = styled.div`
 
     }
 
+   .full {
+      display: inline;
+    }
 
   .full__time {
     font-family: var(--font__sec);
@@ -58,7 +95,8 @@ const Container = styled.div`
     .citydate {
       display: flex;
       justify-self: end;
-      align-self: end;
+      align-self: flex-end;
+      align-content: end;
       margin-right: 1rem;
       margin-left: auto;
       font-family: var(--font__sec);
@@ -66,6 +104,25 @@ const Container = styled.div`
       color: var(--graymed);
       font-size: 1.2rem;
       font-weight: 500;
+
+      
+
+      @media (max-width: 1170px) {
+        flex-direction: column;
+        align-items: end;
+        margin-right: 1rem;
+        margin-left: auto;
+        justify-content: space-between;
+      }
+
+      @media (max-width: 552px){
+          display: flex;
+          flex-direction: row;
+          align-content: flex-start;
+          margin-left: auto;
+          margin-right: 1rem;
+          margin-top: -2rem;
+       }
 
     }
 
@@ -83,22 +140,43 @@ const Container = styled.div`
 
     .city {
       display: flex;
-      align-items: center;
-      margin-right: 2.8rem;           
+      /* align-items: center; */
+      margin-right: 1rem;    
+      
+        @media (max-width: 1170px) {
+        align-self: end;
+        margin-right: 0;
+        margin-left: auto;
+        text-align: right;
+
+      }
+
     }
 
     .city span {
       margin-right: 8px;
+
     }
 
     .date {
       display: flex;
-      align-items: center;
+      /* align-items: center; */
+      
+      @media (max-width: 1107px) {
+        align-self: end;
+        margin-right: 0;
+        margin-left: auto;
+        text-align: right;
+      }
+
     }
 
     .date span {
       margin-right: 8px;
     }
+
+
+    
 
   `;
 
@@ -122,6 +200,7 @@ var numdays = Math.round(dif/(1000*60*60*24))
 
   return (
     <Container onClick={ e => handleClick(e)}>
+      <div className="row__info"> 
         <img src={companyLogo} alt="" />
        
         <div className="information" >
@@ -131,16 +210,17 @@ var numdays = Math.round(dif/(1000*60*60*24))
               {jobType === 'full_time' ? <span className="full__time">Full time</span> : jobType !== '' ? <span className="full__time">{jobType}</span> : null }
             </div>          
         </div>
-
+      </div>
          <div className="citydate">
-                <div className="city">
-                  <span className="material-symbols-outlined">public </span>     
-                  <p>{location}</p>
-                </div>
                 
-                <div className="date">
-                 <span className="material-symbols-outlined"> schedule </span>
-                  <p>{numdays} days ago</p>
+                { (!location) ? null : ( 
+                <div className="city">                      
+                  <p> <span className="material-symbols-outlined">public </span>  {location}</p>                                   
+                 </div>
+                )} 
+
+                <div className="date">                
+                  <p> <span className="material-symbols-outlined"> schedule </span>{numdays} days ago</p>
                 </div>
 
             </div>

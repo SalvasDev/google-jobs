@@ -20,6 +20,24 @@ const Container = styled.div`
   font-family: var(--font__sec);
   color: var(--graymed);
   margin: 0 0 0 auto;
+
+  @media (max-width: 860px){
+      width: 95%;
+      margin-right: 3rem;
+   }
+
+  @media (max-width: 768px){
+      width: 100%;
+      margin-right: 0;
+      margin-left: auto;
+      justify-content: end;
+  }
+
+ @media (max-width: 552px){
+    flex-wrap: wrap;
+    row-gap: 1rem;
+  }
+
 }
 
 .previous,
@@ -81,10 +99,10 @@ const Container = styled.div`
 const Listcards = ({setShowDetail}) => {
 
 const { jobs, consult } = useContext(JobsContext)
-const [ pagecurrent, setPageCurrent ] = useState(1)
 const [ totalpages,  setTotalPages ] = useState(1)
 const [ createbtns, setCreatebtns ] = useState([])
-const { numInit, setNumInit, numEnd, setNumEnd } = useContext(PagesContext)
+const { numInit, setNumInit, numEnd, setNumEnd, setSelected, pagecurrent, setPageCurrent } = useContext(PagesContext)
+
 
  
 let cardsForPage = 5 
@@ -119,6 +137,14 @@ var numButton = 0
 
     setNumEnd(numend)
     setNumInit(numinit) 
+
+    const actualPage = {
+     selec : true,
+     pageSelected : newCurrentPage      
+    }
+    
+    setSelected( actualPage )
+
   } 
 
 
@@ -135,6 +161,13 @@ var numButton = 0
 
     setNumEnd(numend)
     setNumInit(numinit) 
+    
+    const actualPage = {
+      selec : true,
+     pageSelected : newCurrentPage      
+    }
+    
+    setSelected( actualPage )
 
   } 
  

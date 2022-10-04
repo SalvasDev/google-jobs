@@ -5,6 +5,8 @@ import Footer from './Footer';
 import styled from '@emotion/styled'
 
 const Container = styled.div`
+  
+ 
 `;
 
 const Home = ({setShowDetail, handleForce}) => {

@@ -1,13 +1,24 @@
 import React, { useEffect, useState, useContext } from 'react'
 import './header.css'
 import JobsContext from  './context/JobsContext'
+import PagesContext from './context/PagesContext'
 import getJobsPrim from '../services/getJobsPrim'
 import styled from '@emotion/styled'
 
 const Container = styled.div`
         width: min(95%, 1200px);
-        margin: 3.2rem auto 4.2rem auto;
+        margin: 3.2rem auto 4.2rem auto;    
+        max-width: 100%;
+
         
+        .header {
+            @media (max-width: 820px) {
+               max-width: 100%
+            }
+        }
+      
+
+            
         .logo{
             margin-bottom: 3.2rem;
             font-size: 2.4rem;
@@ -49,6 +60,7 @@ const Container = styled.div`
                     color: gray;
                     outline: none;
                     font-family: var(--font__sec);
+                    font-size: 1.4rem;
 
                     &::placeholder {
                         text-align: left;
@@ -89,6 +101,7 @@ const Container = styled.div`
             width: 100%;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 1.4rem;
 
             &:hover {
                 background-color: blue;
@@ -113,11 +126,27 @@ const Container = styled.div`
 
 const Header = () => {
 
+const { setNumInit, setNumEnd, setSelected, setPageCurrent } = useContext(PagesContext)
 const [ search, setSearch ] = useState('')
 const [ error, setError ] = useState(false)
 const { setJobs, consult, setConsult } = useContext(JobsContext)
 
-useEffect( () => {       
+
+useEffect( () => {
+    //Reset list jobs cards
+    setNumInit(0)
+    setNumEnd(5) 
+    
+    // Reset to the current page
+    const actualPage = {
+    selec : true,
+    pageSelected : 1      
+    }    
+    
+    setSelected( actualPage )    
+
+    setPageCurrent(1)   
+
     getJobsPrim( consult, search, setConsult ).then(jobsconsult => setJobs(jobsconsult))
 },[consult])
 
@@ -135,7 +164,6 @@ useEffect( () => {
             setError(true)
             return;
         }
-        console.log(search)
         setError(false)
         setConsult(true)
     }
@@ -145,7 +173,7 @@ useEffect( () => {
   return (
     <Container>
         <a href="/" className="logo">
-            <h1 className="logo">Google<span> jobs</span></h1>
+            <h1 className="logo">Remo<span> jobs</span></h1>
         </a>
        
         <form 

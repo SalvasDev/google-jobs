@@ -10,6 +10,11 @@ const Container = styled.div`
         grid-template-columns: 33% 1fr;
         column-gap: 3rem;
 
+       @media (max-width: 768px){
+        display: flex;
+        flex-direction: column;
+      }
+
         .aside {
           background-color: aqua;
           height: 30rem;
@@ -19,6 +24,9 @@ const Container = styled.div`
           background-color: beige;
           height: 30rem;
 
+            @media (max-width: 768px){
+              width: 100%;
+            }
         }
 `;
 
