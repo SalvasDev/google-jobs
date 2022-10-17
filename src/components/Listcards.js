@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Card from './Card';
 import BtnPage from './BtnPage';
-import JobsContext from  './context/JobsContext'
+import JobsContext from './context/JobsContext'
 import PagesContext from './context/PagesContext'
 import styled from '@emotion/styled'
 
@@ -96,142 +96,145 @@ const Container = styled.div`
 `;
 
 
-const Listcards = ({setShowDetail}) => {
+const Listcards = ({ setShowDetail }) => {
 
-const { jobs, consult } = useContext(JobsContext)
-const [ totalpages,  setTotalPages ] = useState(1)
-const [ createbtns, setCreatebtns ] = useState([])
-const { numInit, setNumInit, numEnd, setNumEnd, setSelected, pagecurrent, setPageCurrent } = useContext(PagesContext)
-
-
- 
-let cardsForPage = 5 
-var calcTotpages = Math.ceil(jobs.length / cardsForPage  )
- 
-var createBtns = []
-var totp = totalpages
-var numButton = 0 
+  const { jobs, consult } = useContext(JobsContext)
+  const [totalpages, setTotalPages] = useState(1)
+  const [createbtns, setCreatebtns] = useState([])
+  const { numInit, setNumInit, numEnd, setNumEnd, setSelected, pagecurrent, setPageCurrent } = useContext(PagesContext)
 
 
-  useEffect( () => {  
+
+  let cardsForPage = 5
+  var calcTotpages = Math.ceil(jobs.length / cardsForPage)
+
+  var createBtns = []
+  var totp = totalpages
+  var numButton = 0
+
+
+  useEffect(() => {
     setTotalPages(calcTotpages)
-    
-    while ( numButton < totp ) {
-        numButton ++
-        createBtns.push(numButton)              
+
+    while (numButton < totp) {
+      numButton++
+      createBtns.push(numButton)
     }
     setCreatebtns(createBtns)
 
-  }, [jobs] )
+  }, [jobs])
 
 
   // Set previous page
   const previousPage = () => {
-    let newCurrentPage = pagecurrent - 1  
+    let newCurrentPage = pagecurrent - 1
 
-    if (newCurrentPage === 0 ) return
+    if (newCurrentPage === 0) return
     setPageCurrent(newCurrentPage)
 
     let numend = newCurrentPage * 5
     let numinit = numend - 5
 
     setNumEnd(numend)
-    setNumInit(numinit) 
+    setNumInit(numinit)
 
     const actualPage = {
-     selec : true,
-     pageSelected : newCurrentPage      
+      selec: true,
+      pageSelected: newCurrentPage
     }
-    
-    setSelected( actualPage )
 
-  } 
+    setSelected(actualPage)
+
+  }
 
 
-   // Set next page
+  // Set next page
   const nextPage = () => {
 
-    let newCurrentPage = pagecurrent + 1  
+    let newCurrentPage = pagecurrent + 1
 
-    if (newCurrentPage > totalpages ) return
+    if (newCurrentPage > totalpages) return
     setPageCurrent(newCurrentPage)
 
     let numend = newCurrentPage * 5
     let numinit = numend - 5
 
     setNumEnd(numend)
-    setNumInit(numinit) 
-    
-    const actualPage = {
-      selec : true,
-     pageSelected : newCurrentPage      
-    }
-    
-    setSelected( actualPage )
+    setNumInit(numinit)
 
-  } 
- 
+    const actualPage = {
+      selec: true,
+      pageSelected: newCurrentPage
+    }
+
+    setSelected(actualPage)
+
+  }
+
   var i = numInit
 
   return (
     <Container>
 
-      {jobs.length === 0 && consult === false ? <p className="error">We did not find any results 😩 , please try again 😀 !!! </p> : null}    
+      {jobs.length === 0 && consult === false ? <p className="error">We did not find any results 😩 , please try again 😀 !!! </p> : null}
 
-       { jobs.slice(numInit, numEnd).map((job) => {
-        
-        i = i + 1;            
+      {jobs.slice(numInit, numEnd).map((job) => {
 
-        var { candidate_required_location, company_logo, company_name, id, job_type, publication_date, title} = jobs[i-1] || {}       
+        i = i + 1;
+
+        var { candidate_required_location, company_logo, company_name, id, job_type, publication_date, title } = jobs[i - 1] || {}
 
         return <Card
-              key = {i.toString()}
-              setShowDetail = {setShowDetail}
-              companyLogo = {company_logo}
-              location = {candidate_required_location}
-              companyName = {company_name}
-              id = {id}
-              jobType = {job_type}
-              publicDate = {publication_date}
-              title = {title}
-            />
-        })
-       }       
-  
-        
-        <div className="index">
-          
-          { (pagecurrent === 1 )  ? null : (
-             <button
-             className="previous"
-             onClick={previousPage}
-          >
-             <span className="material-symbols-outlined">arrow_back_ios</span>
-            </button>  
-          )}
+          key={i.toString()}
+          setShowDetail={setShowDetail}
+          companyLogo={company_logo}
+          location={candidate_required_location}
+          companyName={company_name}
+          id={id}
+          jobType={job_type}
+          publicDate={publication_date}
+          title={title}
+        />
+      })
+      }
 
-          {/* Show page buttons   */}
-          { totalpages === 1 ? null  : (
-           createbtns.map((contInd) => {
-                return  <BtnPage 
-                  key = {contInd.toString()}
-                  numPage = {contInd}
-                  setPageCurrent = {setPageCurrent}
-                 />
-              })            
-            ) 
-          }
-          
-          { (pagecurrent === totalpages) ? null : (
-              <button 
-              className="next"
-              onClick={nextPage}
+
+      {jobs.length === 0 && consult === false ? null : (
+
+        <div className="index">
+          {/* Show previous button */}
+          {(pagecurrent === 1) ? null : (
+            <button
+              className="previous"
+              onClick={previousPage}
             >
-            <span className="material-symbols-outlined">arrow_forward_ios</span>
+              <span className="material-symbols-outlined">arrow_back_ios</span>
             </button>
           )}
 
+          {/* Show page buttons   */}
+          {totalpages === 1 ? null : (
+            createbtns.map((contInd) => {
+              return <BtnPage
+                key={contInd.toString()}
+                numPage={contInd}
+                setPageCurrent={setPageCurrent}
+              />
+            })
+          )
+          }
+
+          {/* Show next button   */}
+          {(pagecurrent === totalpages) ? null : (
+            <button
+              className="next"
+              onClick={nextPage}
+            >
+              <span className="material-symbols-outlined">arrow_forward_ios</span>
+            </button>
+          )}
         </div>
+      )}
 
     </Container>
   )

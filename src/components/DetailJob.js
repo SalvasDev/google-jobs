@@ -1,8 +1,10 @@
-import React, {useContext, useEffect, useState} from 'react'
-import IdContext  from './context/IdContext';
+import React, { useContext, useEffect, useState } from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import IdContext from './context/IdContext';
 import Footer from './Footer';
 import styled from '@emotion/styled'
 import getOneJob from '../services/getOneJob';
+import Loading from './Loading';
 
 const Container = styled.div`
     width: min(95%, 1200px);
@@ -235,92 +237,99 @@ const Container = styled.div`
    
 `;
 
-const DetailJob = ({setShowDetail, handleForce}) => {
+const DetailJob = ({ setShowDetail, handleForce }) => {
 
-const { idJob } = useContext(IdContext)
-const [ oneJob, setOneJob ] = useState([])
-
-const handleClick = (e)  => {
-  e.preventDefault()  
-  handleForce()
-  setShowDetail(false)
-
-}
-
-useEffect(() => {
-    getOneJob( idJob ).then(jobsconsult => setOneJob(jobsconsult))
-}, [idJob])
+    const { idJob } = useContext(IdContext)
+    const [oneJob, setOneJob] = useState([])
+    const [loading, setLoading] = useState(true)
 
 
-var { candidate_required_location, company_logo, company_name, job_type, publication_date, title, url, description} = oneJob || {}  
+    const handleClick = (e) => {
+        e.preventDefault()
+        handleForce()
+        setShowDetail(false)
 
-var jobType = job_type
-var publicDate = publication_date
-
-var dateInit = new Date(publicDate).getTime()
-var dateEnd    = new Date().getTime()
-var dif = dateEnd - dateInit
-var numdays = Math.round(dif/(1000*60*60*24))
-
-var urlCompany = url
-
-var htmlContent = { __html: description };
+    }
 
 
-  return (
-    <Container>
-        <h1 className="logo">Remo<span> jobs</span></h1>
-        <div className="container__job">
-            <div className="aside__job">
-                 <button  onClick={ e => handleClick(e)} className="btn__back">
-                    <span className="material-symbols-rounded">trending_flat</span>
-                    Back to search
-                </button>
-                
-                <h3 className="how">How to Apply</h3>    
-                
-                <p className="contact">Please visit de next page for more information</p>
-               <a className="url__aply" href={urlCompany} target="_blank" rel="noopener noreferrer">  <button className="btn__aply">Aply</button></a> 
-
-            </div>
+    useEffect(() => {
+        getOneJob(idJob).then(jobsconsult => setOneJob(jobsconsult))
+        setLoading(false)
+    }, [idJob])
 
 
-            <div className="main__job">
-                <div className="title__job">
-                    <span className="name__job">{title}</span>
-                    {jobType === 'full_time' ? <span className="full__time">Full time</span> : jobType !== '' ? <span className="full__time">{jobType}</span> : null }
-                </div>
-                
-                <div className="date">
-                <span className="material-symbols-outlined"> schedule </span>
-                  <p>{numdays} days ago</p>
-                </div>
-                
-                <div className="group__company">
-                    
-                    <img src={company_logo} alt="" />
+    var { candidate_required_location, company_logo, company_name, job_type, publication_date, title, url, description } = oneJob || {}
 
-                    <div className="info__company">
-                        <span className="name__company">{company_name}</span>
-                        <div className="city">
-                            <span className="material-symbols-outlined">public </span>     
-                            <p>{candidate_required_location}</p>
-                        </div>                       
+    var jobType = job_type
+    var publicDate = publication_date
+
+    var dateInit = new Date(publicDate).getTime()
+    var dateEnd = new Date().getTime()
+    var dif = dateEnd - dateInit
+    var numdays = Math.round(dif / (1000 * 60 * 60 * 24))
+
+    var urlCompany = url
+
+    var htmlContent = { __html: description };
+
+    if (loading) {
+        return (
+            <Loading />
+        )
+    }
+    else {
+        return (
+            <Container>
+                <h1 className="logo">Remo<span> jobs</span></h1>
+                <div className="container__job">
+                    <div className="aside__job">
+                        <button onClick={e => handleClick(e)} className="btn__back">
+                            <span className="material-symbols-rounded">trending_flat</span>
+                            Back to search
+                        </button>
+
+                        <h3 className="how">How to Apply</h3>
+
+                        <p className="contact">Please visit de next page for more information</p>
+                        <a className="url__aply" href={urlCompany} target="_blank" rel="noopener noreferrer">  <button className="btn__aply">Aply</button></a>
+
                     </div>
+
+
+                    <div className="main__job">
+                        <div className="title__job">
+                            <span className="name__job">{title}</span>
+                            {jobType === 'full_time' ? <span className="full__time">Full time</span> : jobType !== '' ? <span className="full__time">{jobType}</span> : null}
+                        </div>
+
+                        <div className="date">
+                            <span className="material-symbols-outlined"> schedule </span>
+                            <p>{numdays} days ago</p>
+                        </div>
+
+                        <div className="group__company">
+
+                            <img src={company_logo} alt="" />
+
+                            <div className="info__company">
+                                <span className="name__company">{company_name}</span>
+                                <div className="city">
+                                    <span className="material-symbols-outlined">public </span>
+                                    <p>{candidate_required_location}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="description__job" dangerouslySetInnerHTML={htmlContent} />
+                    </div>
+
                 </div>
-                <div  className="description__job" dangerouslySetInnerHTML= {htmlContent} />
-            </div>
 
-        </div>
+                <Footer author='Salvador Sánchez' />
 
-        <Footer author='Salvador Sánchez'/>
-
-
-        
-    </Container>
-  )
+            </Container>
+        )
+    }
 }
-
 export default DetailJob
 
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import './header.css'
-import JobsContext from  './context/JobsContext'
+import JobsContext from './context/JobsContext'
 import PagesContext from './context/PagesContext'
 import getJobsPrim from '../services/getJobsPrim'
 import styled from '@emotion/styled'
@@ -43,6 +43,10 @@ const Container = styled.div`
             flex-direction: row;
             align-items: center;
             column-gap: 1rem;   
+
+            @media(max-width: 490px) {
+              width: 90%;
+            }
         }
 
         
@@ -50,7 +54,7 @@ const Container = styled.div`
         .inp__search {
             display:flex;
             width: 80%;
-            height: 85%;
+            height: 85%;  
 
                 input {
                     width: 100%;
@@ -103,9 +107,14 @@ const Container = styled.div`
             cursor: pointer;
             font-size: 1.4rem;
 
+            @media(max-width: 490px) {
+                font-size: 1.2rem;
+            }
+
             &:hover {
                 background-color: blue;
-            }            
+            }    
+
         }
 
          .search__header:focus-within span {
@@ -126,34 +135,34 @@ const Container = styled.div`
 
 const Header = () => {
 
-const { setNumInit, setNumEnd, setSelected, setPageCurrent } = useContext(PagesContext)
-const [ search, setSearch ] = useState('')
-const [ error, setError ] = useState(false)
-const { setJobs, consult, setConsult } = useContext(JobsContext)
+    const { setNumInit, setNumEnd, setSelected, setPageCurrent } = useContext(PagesContext)
+    const [search, setSearch] = useState('')
+    const [error, setError] = useState(false)
+    const { setJobs, consult, setConsult } = useContext(JobsContext)
 
 
-useEffect( () => {
-    //Reset list jobs cards
-    setNumInit(0)
-    setNumEnd(5) 
-    
-    // Reset to the current page
-    const actualPage = {
-    selec : true,
-    pageSelected : 1      
-    }    
-    
-    setSelected( actualPage )    
+    useEffect(() => {
+        //Reset list jobs cards
+        setNumInit(0)
+        setNumEnd(5)
 
-    setPageCurrent(1)   
+        // Reset to the current page
+        const actualPage = {
+            selec: true,
+            pageSelected: 1
+        }
 
-    getJobsPrim( consult, search, setConsult ).then(jobsconsult => setJobs(jobsconsult))
-},[consult])
+        setSelected(actualPage)
+
+        setPageCurrent(1)
+
+        getJobsPrim(consult, search, setConsult).then(jobsconsult => setJobs(jobsconsult))
+    }, [consult])
 
 
     // Function for set items into state
     const handleChange = e => {
-        setSearch(e.target.value)        
+        setSearch(e.target.value)
     }
 
 
@@ -170,39 +179,39 @@ useEffect( () => {
 
 
 
-  return (
-    <Container>
-        <a href="/" className="logo">
-            <h1 className="logo">Remo<span> jobs</span></h1>
-        </a>
-       
-        <form 
-            onSubmit={handleSubmit}
-        >
-            <div className="header">
-                <div className="search__header">
-                    <div className='icon__job'>
-                        <span className="material-symbols-outlined">work </span>
-                    </div>
+    return (
+        <Container>
+            <a href="/" className="logo">
+                <h1 className="logo">Remo<span> jobs</span></h1>
+            </a>
+
+            <form
+                onSubmit={handleSubmit}
+            >
+                <div className="header">
+                    <div className="search__header">
+                        <div className='icon__job'>
+                            <span className="material-symbols-outlined">work </span>
+                        </div>
                         <div className="inp__search">
-                            <input 
+                            <input
                                 type='text'
                                 name='search'
                                 id={search}
-                                className= 'inpser' 
+                                className='inpser'
                                 placeholder='Title or companies'
                                 onChange={handleChange}
-                            />                    
+                            />
                         </div>
                         <div className="button__search">
-                             <button>Search</button>
+                            <button>Search</button>
                         </div>
+                    </div>
                 </div>
-            </div> 
-            {error ? <p className="error">Please enter a value</p> : null}    
-        </form>
-    </Container>
-  )
+                {error ? <p className="error">Please enter a value</p> : null}
+            </form>
+        </Container>
+    )
 }
 
 export default Header
