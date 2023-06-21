@@ -133,8 +133,8 @@ const Container = styled.div`
       font-family: var(--font__sec);
       font-weight: 500;
       color: var(--graymed);
-      align-items: center;
-
+      align-items: top;      
+      
     }
 
     .date span {
@@ -321,7 +321,6 @@ const DetailJob = ({ setShowDetail, handleForce }) => {
                         </div>
                         <div className="description__job" dangerouslySetInnerHTML={htmlContent} />
                     </div>
-
                 </div>
 
                 <Footer author='Salvador Sánchez' />

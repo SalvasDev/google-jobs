@@ -24,7 +24,6 @@ const Btn = styled.div`
   &:hover span {
     color: white;
   }  
-
   }
 }
 
@@ -33,7 +32,6 @@ const Btn = styled.div`
   color: white;
   border: none;
 }
-
 
 `;
 
@@ -62,14 +60,14 @@ const BtnPage = ({numPage, setPageCurrent}) => {
   var numend = numPage * 5
   var numinit = numend - 5
 
- let btnSelected = selec && (pageSelected === numPage)  ? 'actived' : ''
+ var btnSelected = selec && (pageSelected === numPage)  ? 'actived' : ''
 
   return (
     <Btn>
         <button 
             className= 'page'
             onClick={handleClick}
-            id= {btnSelected}
+            id={btnSelected}
             >                
            <span>{numPage}</span>
          </button>

@@ -1,17 +1,17 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 const Context = React.createContext({})
 
-export function IdContextProvider ({children}) {
+export function IdContextProvider({ children }) {
 
-    const [ idJob, setIdJob ] = useState(0)
+    const [idJob, setIdJob] = useState(0)
 
 
     return (
-    
-    <Context.Provider value={{ idJob, setIdJob}}>
-        {children}
-    </Context.Provider>
+
+        <Context.Provider value={{ idJob, setIdJob }}>
+            {children}
+        </Context.Provider>
     )
 
 }
