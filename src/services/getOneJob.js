@@ -1,6 +1,6 @@
 const getOneJob = async (idJob) => {
 
-    // Consult for title 
+    // Consult for id
     const base = 'https://remotive.com/api/remote-jobs'
 
     const response = await fetch(base)
@@ -13,3 +13,6 @@ const getOneJob = async (idJob) => {
 }
 
 export default getOneJob
+
+
+
