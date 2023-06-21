@@ -4,6 +4,7 @@ import IdContext from './context/IdContext';
 import Footer from './Footer';
 import styled from '@emotion/styled'
 import getOneJob from '../services/getOneJob';
+import Loading from './Loading';
 
 const Container = styled.div`
     width: min(95%, 1200px);
@@ -238,19 +239,18 @@ const Container = styled.div`
 
 const DetailJob = ({ setShowDetail, handleForce }) => {
 
-    const { idJob } = useContext(IdContext)
-    const [oneJob, setOneJob] = useState([])
+    const { idJob } = useContext(IdContext);
+    const [oneJob, setOneJob] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [dataFetched, setDataFetched] = useState(false);
+
+
 
     const handleClick = (e) => {
         e.preventDefault()
         handleForce()
         setShowDetail(false)
     }
-
-
-    useEffect(() => {
-        getOneJob(idJob).then(jobsconsult => setOneJob(jobsconsult))
-    }, [idJob])
 
 
 
@@ -276,57 +276,74 @@ const DetailJob = ({ setShowDetail, handleForce }) => {
 
     var htmlContent = { __html: description };
 
-    return (
-        <Container>
-            <h1 className="logo">Remo<span> jobs</span></h1>
-            <div className="container__job">
-                <div className="aside__job">
-                    <button onClick={e => handleClick(e)} className="btn__back">
-                        <span className="material-symbols-rounded">trending_flat</span>
-                        Back to search
-                    </button>
 
-                    <h3 className="how">How to Apply</h3>
-
-                    <p className="contact">Please visit de next page for more information</p>
-                    <a className="url__aply" href={urlCompany} target="_blank" rel="noopener noreferrer">  <button className="btn__aply">Aply</button></a>
-
-                </div>
+    useEffect(() => {
+        getOneJob(idJob)
+            .then((jobsconsult) => setOneJob(jobsconsult))
+            .finally(() => {
+                setLoading(false);
+                setDataFetched(true);
+            });
+    }, [idJob]);
 
 
-                <div className="main__job">
-                    <div className="title__job">
-                        <span className="name__job">{title}</span>
-                        {job_type === 'full_time' ? <span className="full__time">Full time</span> : job_type !== '' ? <span className="full__time">{job_type}</span> : null}
+    if (loading) {
+        return <Loading />;
+    } else if (!dataFetched) {
+        return null;
+    } else {
+
+        return (
+            <Container>
+                <h1 className="logo">Remo<span> jobs</span></h1>
+                <div className="container__job">
+                    <div className="aside__job">
+                        <button onClick={e => handleClick(e)} className="btn__back">
+                            <span className="material-symbols-rounded">trending_flat</span>
+                            Back to search
+                        </button>
+
+                        <h3 className="how">How to Apply</h3>
+
+                        <p className="contact">Please visit de next page for more information</p>
+                        <a className="url__aply" href={urlCompany} target="_blank" rel="noopener noreferrer">  <button className="btn__aply">Aply</button></a>
+
                     </div>
 
-                    <div className="date">
-                        <span className="material-symbols-outlined"> schedule </span>
-                        <p>{numdays} days ago</p>
-                    </div>
 
-                    <div className="group__company">
+                    <div className="main__job">
+                        <div className="title__job">
+                            <span className="name__job">{title}</span>
+                            {job_type === 'full_time' ? <span className="full__time">Full time</span> : job_type !== '' ? <span className="full__time">{job_type}</span> : null}
+                        </div>
 
-                        <img src={company_logo} alt="" />
+                        <div className="date">
+                            <span className="material-symbols-outlined"> schedule </span>
+                            <p>{numdays} days ago</p>
+                        </div>
 
-                        <div className="info__company">
-                            <span className="name__company">{company_name}</span>
-                            <div className="city">
-                                <span className="material-symbols-outlined">public </span>
-                                <p>{candidate_required_location}</p>
+                        <div className="group__company">
+
+                            <img src={company_logo} alt="" />
+
+                            <div className="info__company">
+                                <span className="name__company">{company_name}</span>
+                                <div className="city">
+                                    <span className="material-symbols-outlined">public </span>
+                                    <p>{candidate_required_location}</p>
+                                </div>
                             </div>
                         </div>
+                        <div className="description__job" dangerouslySetInnerHTML={htmlContent} />
                     </div>
-                    <div className="description__job" dangerouslySetInnerHTML={htmlContent} />
                 </div>
-            </div>
 
-            <Footer author='Salvador Sánchez' />
+                <Footer author='Salvador Sánchez' />
 
-        </Container>
-    )
+            </Container>
+        )
+    }
 }
-
 export default DetailJob
 
 
